@@ -9,4 +9,4 @@ jobs:
 
     steps:
       - name: Setup
-        run: curl -sL https://nagayamaryoga.github.io/dotfiles/install.sh | sh
+        run: curl -sL https://sugurumorimoto.github.io/dotfiles/install.sh | sh
