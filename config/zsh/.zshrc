@@ -78,21 +78,12 @@ zinit light mollifier/anyframe
 bindkey '^wf' anyframe-widget-cdr
 bindkey '^wd' anyframe-widget-execute-history
 
-### brew-files ###
-export HOMEBREW_BREWFILE="${HOME}/Dropbox/Brewfile"
-#初期化
-#brew file init
-#自動更新
-if [ -f $(brew --prefix)/etc/brew-wrap ];then
-  source $(brew --prefix)/etc/brew-wrap
-fi
-
 ### plugins ###
 zinit wait lucid null for \
-    atinit'source "$ZDOTDIR/.zshrc.lazy"' \
+    atinit'source "$XDG_CONFIG_HOME/zsh/.zshrc.lazy"' \
     @'zdharma-continuum/null'
 
 #zshrcをコンパイル
-if [ $ZDOTDIR/.zshrc -nt ~$ZDOTDIR/.zshrc.zwc ]; then
-  zcompile ~$ZDOTDIR/.zshrc
+if [ $XDG_CONFIG_HOME/zsh/.zshrc -nt ~$XDG_CONFIG_HOME/zsh/.zshrc.zwc ]; then
+  zcompile ~$XDG_CONFIG_HOME/zsh/.zshrc
 fi

@@ -21,6 +21,8 @@ mkdir -p \
 ln -sfv "$REPO_DIR/config/"* "$XDG_CONFIG_HOME"
 ln -sfv "$XDG_CONFIG_HOME/zsh/.zshenv" "$HOME/.zshenv"
 ln -sfv "$XDG_CONFIG_HOME/zsh/.zprofile" "$HOME/.zprofile"
+ln -sfv "$XDG_CONFIG_HOME/zsh/.zshrc" "$HOME/.zshrc"
+ln -sfv "$XDG_CONFIG_HOME/zsh/.zshrc.lazy" "$HOME/.zshrc.lazy"
 ln -sfv "$XDG_CONFIG_HOME/editorconfig/.editorconfig" "$HOME/.editorconfig"
 ln -sfnv "$XDG_CONFIG_HOME/vim" "$HOME/.vim"
 ln -sfv "$XDG_CONFIG_HOME/commitizen/.czrc" "$HOME/.czrc"

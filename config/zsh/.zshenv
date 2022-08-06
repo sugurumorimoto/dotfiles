@@ -14,6 +14,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 ### zsh ###
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export HISTFILE=$XDG_CONFIG_HOME/zsh/.zsh_history
 
 ### Rust ###
 export RUST_BACKTRACE=1
