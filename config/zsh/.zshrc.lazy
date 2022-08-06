@@ -1,10 +1,4 @@
 ### Aliases ###
-alias la='ls -a'
-alias ll='ls -al'
-
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
 
 case "$OSTYPE" in
     linux*)
@@ -24,11 +18,12 @@ case "$OSTYPE" in
         alias p='cat /dev/clipboard'
     ;;
     darwin*)
+        #GNU系ツールに置換
         alias pp='pbcopy'
         alias p='pbpaste'
         alias chrome='open -a "Google Chrome"'
         (( ${+commands[gdate]} )) && alias date='gdate'
-        (( ${+commands[gls]} )) && alias ls='gls --color=auto'
+        #(( ${+commands[gls]} )) && alias ls='gls --color=auto'
         (( ${+commands[gmkdir]} )) && alias mkdir='gmkdir'
         (( ${+commands[gcp]} )) && alias cp='gcp -i'
         (( ${+commands[gmv]} )) && alias mv='gmv -i'
@@ -44,9 +39,150 @@ case "$OSTYPE" in
     ;;
 esac
 
+: "略語展開(iab)" && {
+  # date
+  alias dates='date "+%Y-%m-%d %T.%N"'
+  alias today="date '+%Y%m%d'"
+  alias today_="date '+%Y-%m-%d'"
+  alias now="date '+%Y%m%d_%H%M%S'"
+  alias now_="date '+%Y-%m-%d_%H%M%S'"
+
+  # 言語
+  alias utf='export LANG=ja_JP.UTF-8; export LANGUAGE=ja_JP.UTF-8; export LC_ALL=ja_JP.UTF-8'
+  alias en='export LANG=en; export LANGUAGE=en; export LC_ALL=en'
+
+  #python
+  alias pip_freeze='pip freeze --all >| ${HOME}/dotfiles/config/pip/requirements.txt'
+
+  # cd
+  abbrev-alias ..="cd .."
+  abbrev-alias ...="cd ../.."
+  abbrev-alias ....="cd ../../.."
+  abbrev-alias .....="cd ../../../.."
+  
+  abbrev-alias zsh-startuptime='for i in $(seq 1 10); do time zsh -i -c exit > /dev/null ; done' # zsh起動速度計算
+  abbrev-alias brew-push='brew-file push'
+  abbrev-alias ls='exa -a' # G: macOSで色を付ける
+  abbrev-alias ll='exa -alhg --group-directories-first --git --time-style long-iso'
+  abbrev-alias l1="ls -1G"
+  abbrev-alias Mycheck="sudo smartctl --all /dev/disk0" # SSD書き込み量など確認
+  abbrev-alias pwg="pwgen -s -B -n -c 8 1"
+  abbrev-alias pwgs="pwgen -s -B -n -c -y 8 1"
+  abbrev-alias his='history'
+  abbrev-alias help='man'
+  abbrev-alias which='whence -p'
+  #abbrev-alias tree="tree -N -C -F -N -a -I '.git|.svn'" # N: 文字化け対策, C:色をつける
+  abbrev-alias mywget='aria2c -x10 -s10'
+  abbrev-alias R="/Library/Frameworks/R.framework/Resources/bin/R --no-save --no-restore-data"
+  abbrev-alias r="R"
+  abbrev-alias brews='brew list -1'
+  abbrev-alias powerline-daemon="/Users/${users}/.local/bin/powerline-daemon"
+  abbrev-alias breup='brew update && brew upgrade'
+  # 直下ディレクトリ全てのファイル名検索
+  abbrev-alias figr='fd . -t f | rg'
+  # 直下ディレクトリ全てのファイル内の文章検索
+  abbrev-alias stgr='fd . -t f | xargs rg'
+  # Reload the shell (i.e. invoke as a login shell)
+  abbrev-alias reload="exec ${SHELL} -l"
+  # Print each PATH entry on a separate line
+  abbrev-alias path='echo -e ${PATH//:/\\n}'
+  # Intuitive map function
+  # For example, to list all directories that contain a certain file:
+  # find . -name .gitattributes | map dirname
+  abbrev-alias map="xargs -n1"
+  # Merge PDF files, preserving hyperlinks
+  # Usage: `mergepdf input{1,2,3}.pdf`
+  abbrev-alias mergepdf='gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=_merged.pdf'
+  # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+  #abbrev-alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g'
+  abbrev-alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup'
+
+  # remove old CommandLineTools
+  # to force upgrade
+  # install latest
+  abbrev-alias updatexcode='sudo rm -rf /Library/Developer/CommandLineTools; sudo xcode-select --install'
+  abbrev-alias -g a1="awk '{print \$1}'"
+  abbrev-alias -g a2="awk '{print \$2}'"
+  abbrev-alias -g a3="awk '{print \$3}'"
+  abbrev-alias -g a4="awk '{print \$4}'"
+  abbrev-alias -g a5="awk '{print \$5}'"
+  abbrev-alias -g a6="awk '{print \$6}'"
+  abbrev-alias -g a7="awk '{print \$7}'"
+  abbrev-alias -g a8="awk '{print \$8}'"
+  abbrev-alias -g a9="awk '{print \$9}'"
+  abbrev-alias -g a10="awk '{print \$10}'"
+  abbrev-alias -g a11="awk '{print \$11}'"
+  abbrev-alias -g a12="awk '{print \$12}'"
+  abbrev-alias -g a13="awk '{print \$13}'"
+  abbrev-alias -g a14="awk '{print \$14}'"
+  abbrev-alias -g a15="awk '{print \$15}'"
+  abbrev-alias -g a16="awk '{print \$16}'"
+  abbrev-alias myzcomp='for f in $(fd -t f | grep ".zsh"); do zcompile $f; done'
+  abbrev-alias -g and="|" # パイプが遠いのでandを割り当てる。例えば`tail -f ./log | grep error`を`tail -f ./log and grep error`と書くことができる
+}
+
+
+### Functions ###
+
+zinit ice wait'!0'; zinit snippet PZT::modules/directory/init.zsh
+zinit ice wait'!0'; zinit light b4b4r07/enhancd
+
+#cd and make dir
+function cmd() {
+    mkdir -p $1;
+    cd $1;
+}
+
+#cd
+: "cd先のディレクトリのファイル一覧を表示する" && {
+  [ -z "$ENHANCD_ROOT" ] && function chpwd { tree -L 1 } # enhancdがない場合
+  [ -z "$ENHANCD_ROOT" ] || export ENHANCD_HOOK_AFTER_CD="tree -L 1" # enhancdがあるときはそのHook機構を使う
+}
+function cd() {
+    if [[ "$#" != 0 ]]; then
+        builtin cd "$@";
+        return
+    fi
+    while true; do
+        local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;')
+        local dir="$(printf '%s\n' "${lsd[@]}" |
+            fzf --reverse --preview '
+                __cd_nxt="$(echo {})";
+                __cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+                echo $__cd_path;
+                echo;
+                ls -p --color=always "${__cd_path}";
+        ')"
+        [[ ${#dir} != 0 ]] || return 0
+        builtin cd "$dir" &> /dev/null
+    done
+}
+
+#man
+man() {
+  command env \
+    LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+    LESS_TERMCAP_md=$(printf "\e[1;31m") \
+    LESS_TERMCAP_me=$(printf "\e[0m") \
+    LESS_TERMCAP_se=$(printf "\e[0m") \
+    LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+    LESS_TERMCAP_ue=$(printf "\e[0m") \
+    LESS_TERMCAP_us=$(printf "\e[1;32m") \
+    _NROFF_U=1 \
+    man "$@"
+}
+
+#trash
 (( ${+commands[trash]} )) && alias rm='trash'
 
-mkcd() { command mkdir -p -- "$@" && builtin cd "${@[-1]:a}" }
+##コマンド中央に移動
+function jump_middle() {
+    CURSOR=$((${#BUFFER} / 2))
+    zle redisplay
+}
+zle -N jump_middle
+bindkey "^j" jump_middle
+
 
 j() {
     local root dir
@@ -64,12 +200,17 @@ jj() {
     builtin cd "$root"
 }
 
+### path ###
+path_append ()  { path_remove $1; export PATH="$PATH:$1"; }
+path_prepend () { path_remove $1; export PATH="$1:$PATH"; }
+path_remove ()  { export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`; }
+
 ### diff ###
 diff() { command diff "$@" | bat --paging=never --plain --language=diff }
 alias diffall='diff --new-line-format="+%L" --old-line-format="-%L" --unchanged-line-format=" %L"'
 
 ### direnv ###
-(( ${+commands[direnv]} )) && eval "$(direnv hook zsh)"
+#(( ${+commands[direnv]} )) && eval "$(direnv hook zsh)"
 
 ### FZF ###
 export FZF_DEFAULT_OPTS='--reverse --border --ansi --bind="ctrl-d:print-query,ctrl-p:replace-query"'
@@ -102,9 +243,15 @@ zinit wait'1' lucid light-mode for \
 ### zsh plugins ###
 zinit wait lucid blockf light-mode for \
     atload'async_init' @'mafredri/zsh-async' \
+    @'chrissicool/zsh-256color' \
     @'zsh-users/zsh-autosuggestions' \
     @'zsh-users/zsh-completions' \
+    @'jsforce/jsforce-zsh-completions' \
+    @'zdharma-continuum/history-search-multi-word' \
     @'zdharma-continuum/fast-syntax-highlighting'
+
+setopt correct # 入力しているコマンド名が間違っている場合にもしかして：を出す。
+setopt interactive_comments # コマンドラインでも # 以降をコメントと見なす
 
 ### programs ###
 zinit wait lucid light-mode as'program' from'gh-r' for \
@@ -171,28 +318,6 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     atload'__navi_atload' \
     @'denisidoro/navi'
 
-### zeno.zsh ###
-export ZENO_HOME="$XDG_CONFIG_HOME/zeno"
-export ZENO_ENABLE_SOCK=1
-# export ZENO_DISABLE_BUILTIN_COMPLETION=1
-export ZENO_GIT_CAT="bat --color=always"
-export ZENO_GIT_TREE="exa --tree"
-
-__zeno_atload() {
-    bindkey ' '  zeno-auto-snippet
-    bindkey '^M' zeno-auto-snippet-and-accept-line
-    bindkey '^P' zeno-completion
-}
-
-zinit wait lucid light-mode for \
-    atload'__zeno_atload' \
-    @'yuki-yano/zeno.zsh'
-
-### Emojify ###
-zinit wait lucid light-mode as'program' for \
-    atclone'rm -f *.{py,bats}' atpull'%atclone' \
-    @'mrowa44/emojify'
-
 ### Forgit ###
 __forgit_atload() {
     export FORGIT_INSTALL_DIR="$PWD"
@@ -202,42 +327,6 @@ zinit wait lucid light-mode as'program' for \
     atload'__forgit_atload' \
     pick'bin/git-forgit' \
     @'wfxr/forgit'
-
-### zsh-replace-multiple-dots ###
-__replace_multiple_dots_atload() {
-    replace_multiple_dots_exclude_go() {
-        if [[ "$LBUFFER" =~ '^go ' ]]; then
-            zle self-insert
-        else
-            zle .replace_multiple_dots
-        fi
-    }
-
-    zle -N .replace_multiple_dots replace_multiple_dots
-    zle -N replace_multiple_dots replace_multiple_dots_exclude_go
-}
-
-zinit wait lucid light-mode for \
-    atload'__replace_multiple_dots_atload' \
-    @'momo-lab/zsh-replace-multiple-dots'
-
-### tealdeer ###
-__tealdeer_atclone() {
-    curl -sSL 'https://raw.githubusercontent.com/dbrgn/tealdeer/main/completion/zsh_tealdeer' -o _tealdeer
-}
-__tealdeer_atload() {
-    export TEALDEER_CONFIG_DIR="$XDG_CONFIG_HOME/tealdeer"
-    export TEALDEER_CACHE_DIR="$XDG_CACHE_HOME/tealdeer"
-}
-zinit wait lucid light-mode as'program' from'gh-r' for \
-    mv'tealdeer* -> tldr' \
-    atclone'__tealdeer_atclone' atpull'%atclone' \
-    atload'__tealdeer_atload' \
-    @'dbrgn/tealdeer'
-
-### chpwd-recent-dirs ###
-add-zsh-hook chpwd chpwd_recent_dirs
-zstyle ':chpwd:*' recent-dirs-file "$XDG_STATE_HOME/chpwd-recent-dirs"
 
 ### ls-colors ###
 export LS_COLORS="di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32"
@@ -264,38 +353,8 @@ alias cmakerel='cmake -DCMAKE_BUILD_TYPE=Release -B "$(git rev-parse --show-topl
 cmakeb() { cmake --build "${1:-$(git rev-parse --show-toplevel)/build}" -j"$(($(nproc)+1))" "${@:2}" }
 cmaket() { ctest --verbose --test-dir "${1:-$(git rev-parse --show-toplevel)/build}" "${@:2}" }
 
-### Docker ###
-docker() {
-    if [ "$#" -eq 0 ] || [ "$1" = "compose" ] || ! command -v "docker-$1" >/dev/null; then
-        command docker "${@:1}"
-    else
-        "docker-$1" "${@:2}"
-    fi
-}
-
-docker-clean() {
-    command docker ps -aqf status=exited | xargs -r docker rm --
-}
-docker-cleani() {
-    command docker images -qf dangling=true | xargs -r docker rmi --
-}
-docker-rm() {
-    if [ "$#" -eq 0 ]; then
-        command docker ps -a | fzf --exit-0 --multi --header-lines=1 | awk '{ print $1 }' | xargs -r docker rm --
-    else
-        command docker rm "$@"
-    fi
-}
-docker-rmi() {
-    if [ "$#" -eq 0 ]; then
-        command docker images | fzf --exit-0 --multi --header-lines=1 | awk '{ print $3 }' | xargs -r docker rmi --
-    else
-        command docker rmi "$@"
-    fi
-}
-
 ### Editor ###
-export EDITOR="vi"
+export EDITOR="code"
 (( ${+commands[vim]} )) && EDITOR="vim"
 (( ${+commands[nvim]} )) && EDITOR="nvim"
 
@@ -319,18 +378,30 @@ alias -s d=rdmd
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
 
 ### npm ###
-export NPM_CONFIG_DIR="$XDG_CONFIG_HOME/npm"
-export NPM_DATA_DIR="$XDG_DATA_HOME/npm"
-export NPM_CACHE_DIR="$XDG_CACHE_HOME/npm"
-export NPM_CONFIG_USERCONFIG="$NPM_CONFIG_DIR/npmrc"
+# -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+#[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+export PATH="${HOME}/.nvm:$PATH"
+export NVM_DIR="/opt/homebrew/opt/nvm"
+if [ -e "$NVM_DIR/nvm.sh" ]; then
+  alias nvm='unalias nvm node npm && . "$NVM_DIR"/nvm.sh && nvm'
+  alias node='unalias nvm node npm && . "$NVM_DIR"/nvm.sh && node'
+  alias npm='unalias nvm node npm && . "$NVM_DIR"/nvm.sh && npm'
+fi
 
 ### irb ###
 export IRBRC="$XDG_CONFIG_HOME/irb/irbrc"
 
+#anyenv
+eval "$(anyenv lazyload)"
+
 ### Python ###
-alias python="python3"
-alias pip="pip3"
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+
+#python
+alias pyenv="SDKROOT=$(xcrun --show-sdk-path) pyenv"
+export PATH="${HOME}/.anyenv/envs/pyenv/shims:$PATH"
+export PATH="${HOME}/.local/bin:$PATH"
+alias python='python3'
 
 ### pylint ###
 export PYLINTHOME="$XDG_CACHE_HOME/pylint"
@@ -350,7 +421,6 @@ if [ -f "$ZDOTDIR/.zshrc.local" ]; then
 fi
 
 ### autoloads ###
-autoload -Uz cdr
-autoload -Uz chpwd_recent_dirs
-autoload -Uz _zinit
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
 zpcompinit
