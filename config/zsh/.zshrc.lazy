@@ -89,7 +89,7 @@ esac
   abbrev-alias powerline-daemon="/Users/${users}/.local/bin/powerline-daemon"
   abbrev-alias breup='brew update && brew upgrade'
   # 直下ディレクトリ全てのファイル名検索
-  abbrev-alias figr='fd . -t f | rg'
+  abbrev-alias figr='fd . | rg'
   # 直下ディレクトリ全てのファイル内の文章検索
   abbrev-alias stgr='fd . -t f | xargs rg'
   # Reload the shell (i.e. invoke as a login shell)

@@ -8,3 +8,4 @@ local.*
 .zcomp*
 .zsh_history
 .chpwd-recent-dirs
+.zsh_sessions
