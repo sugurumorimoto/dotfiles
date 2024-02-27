@@ -64,6 +64,9 @@ esac
   #python
   alias pip_freeze='pip freeze --all >| ${HOME}/dotfiles/config/pip/requirements.txt'
 
+  #R https://github.com/randy3k/radian
+  alias r="radian"
+
   # cd
   abbrev-alias ..="cd .."
   abbrev-alias ...="cd ../.."
