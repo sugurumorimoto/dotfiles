@@ -66,6 +66,7 @@ esac
 
   #R https://github.com/randy3k/radian
   alias r="radian"
+  alias R="radian"
 
   # cd
   abbrev-alias ..="cd .."
@@ -386,6 +387,8 @@ e() {
 alias -s {bz2,gz,tar,xz}='tar xvf'
 alias -s zip=unzip
 alias -s d=rdmd
+alias -s py='python'
+
 
 ### Node.js ###
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
