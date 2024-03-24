@@ -1,11 +1,17 @@
 ### brew-files ###
-eval $(/opt/homebrew/bin/brew shellenv)
-export HOMEBREW_BREWFILE="${HOME}/Dropbox/Brewfile"
-#初期化
-#brew file init
-#自動更新
-if [ -f $(brew --prefix)/etc/brew-wrap ];then
-  source $(brew --prefix)/etc/brew-wrap
+if [ "$(uname -m)" = "arm64" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export PATH="/opt/homebrew/bin:$PATH"
+  export HOMEBREW_BREWFILE="${HOME}/Dropbox/Brewfile"
+  if [ -f $(brew --prefix)/etc/brew-wrap ];then
+    source $(brew --prefix)/etc/brew-wrap
+
+    _post_brewfile_update () {
+        echo "Brewfile was updated!"
+    }
+  fi
+else
+  eval "$(/usr/local/bin/brew shellenv)"
 fi
 
 ### Aliases ###
@@ -64,16 +70,12 @@ esac
   #python
   alias pip_freeze='pip freeze --all >| ${HOME}/dotfiles/config/pip/requirements.txt'
 
-  #R https://github.com/randy3k/radian
-  alias r="radian"
-  alias R="radian"
-
   # cd
   abbrev-alias ..="cd .."
   abbrev-alias ...="cd ../.."
   abbrev-alias ....="cd ../../.."
   abbrev-alias .....="cd ../../../.."
-  
+
   abbrev-alias zsh-startuptime='for i in $(seq 1 10); do time zsh -i -c exit > /dev/null ; done' # zsh起動速度計算
   abbrev-alias brew-push='brew-file push'
   abbrev-alias ls='exa -a' # G: macOSで色を付ける
@@ -87,8 +89,6 @@ esac
   abbrev-alias which='whence -p'
   #abbrev-alias tree="tree -N -C -F -N -a -I '.git|.svn'" # N: 文字化け対策, C:色をつける
   abbrev-alias mywget='aria2c -x10 -s10'
-  abbrev-alias R="/Library/Frameworks/R.framework/Resources/bin/R --no-save --no-restore-data"
-  abbrev-alias r="R"
   abbrev-alias brews='brew list -1'
   abbrev-alias powerline-daemon="/Users/${users}/.local/bin/powerline-daemon"
   abbrev-alias breup='brew update && brew upgrade'
@@ -140,6 +140,37 @@ esac
 
 zinit ice wait'!0'; zinit snippet PZT::modules/directory/init.zsh
 zinit ice wait'!0'; zinit light b4b4r07/enhancd
+
+## コマンド履歴からディレクトリ検索・移動
+if [[ -n $(echo ${^fpath}/chpwd_recent_dirs(N)) && -n $(echo ${^fpath}/cdr(N)) ]]; then
+  autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+  add-zsh-hook chpwd chpwd_recent_dirs
+  zstyle ':completion:*' recent-dirs-insert both
+  zstyle ':chpwd:*' recent-dirs-default true
+  zstyle ':chpwd:*' recent-dirs-max 1000
+  zstyle ':chpwd:*' recent-dirs-file "$HOME/.cache/chpwd-recent-dirs"
+fi
+function peco-cdr () {
+  local selected_dir="$(cdr -l | sed 's/^[0-9]* *//' | peco)"
+  if [ -n "$selected_dir" ]; then
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+  fi
+}
+zle -N peco-cdr
+bindkey '^E' peco-cdr
+
+## カレントディレクトリ以下のディレクトリ検索・移動
+function find_cd() {
+  local selected_dir=$(find . -type d | peco)
+  if [ -n "$selected_dir" ]; then
+    BUFFER="cd ${selected_dir}"
+    zle accept-line
+  fi
+}
+zle -N find_cd
+bindkey '^X' find_cd
+
 
 #cd and make dir
 function cmd() {
@@ -388,7 +419,8 @@ alias -s {bz2,gz,tar,xz}='tar xvf'
 alias -s zip=unzip
 alias -s d=rdmd
 alias -s py='python'
-
+alias -s bash='bash'
+alias -s zsh='zsh'
 
 ### Node.js ###
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/node_history"
@@ -406,27 +438,6 @@ fi
 
 ### irb ###
 export IRBRC="$XDG_CONFIG_HOME/irb/irbrc"
-
-#anyenv
-eval "$(anyenv lazyload)"
-
-### homebrew ###
- if [ -f $(brew --prefix)/etc/brew-wrap ];then
-   source $(brew --prefix)/etc/brew-wrap
-
-   _post_brewfile_update () {
-     echo "Brewfile was updated!"
-   }
-fi
-
-### Python ###
-export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
-
-#python
-alias pyenv="SDKROOT=$(xcrun --show-sdk-path) pyenv"
-export PATH="${HOME}/.anyenv/envs/pyenv/shims:$PATH"
-export PATH="${HOME}/.local/bin:$PATH"
-alias python='python3'
 
 ### pylint ###
 export PYLINTHOME="$XDG_CACHE_HOME/pylint"
@@ -449,3 +460,33 @@ fi
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 zpcompinit
+
+
+### Python ###
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+
+# <<<<<< Added by TR 20220405 <<
+arch_name="$(uname -m)"
+
+if [ "${arch_name}" = "x86_64" ]; then
+    echo "Running on Rosetta using miniconda"
+    source ~/.start_miniconda3.sh
+elif [ "${arch_name}" = "arm64" ]; then
+    echo "Running on ARM64"
+    #source ~/.start_miniforge3.sh
+    #anyenv
+    eval "$(anyenv lazyload)"
+    alias pyenv="SDKROOT=$(xcrun --show-sdk-path) pyenv"
+    export PATH="${HOME}/.anyenv/envs/pyenv/shims:$PATH"
+    export PATH="${HOME}/.local/bin:$PATH"
+    alias python='python3'
+else
+    echo "Unknown architecture: ${arch_name}"
+fi
+
+### R ###
+#Radian https://github.com/randy3k/radian
+alias r='radian'
+alias R='radian'
+
+# <<<<<<<< end <<<<<<<

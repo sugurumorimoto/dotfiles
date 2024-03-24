@@ -82,8 +82,3 @@ bindkey '^wd' anyframe-widget-execute-history
 zinit wait lucid null for \
     atinit'source "$XDG_CONFIG_HOME/zsh/.zshrc.lazy"' \
     @'zdharma-continuum/null'
-
-#zshrcをコンパイル
-if [ $XDG_CONFIG_HOME/zsh/.zshrc -nt ~$XDG_CONFIG_HOME/zsh/.zshrc.zwc ]; then
-  zcompile ~$XDG_CONFIG_HOME/zsh/.zshrc
-fi
