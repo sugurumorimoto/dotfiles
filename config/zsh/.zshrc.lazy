@@ -1,17 +1,27 @@
 ### brew-files ###
 if [ "$(uname -m)" = "arm64" ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  export PATH="/opt/homebrew/bin:$PATH"
-  export HOMEBREW_BREWFILE="${HOME}/Dropbox/Brewfile"
-  if [ -f $(brew --prefix)/etc/brew-wrap ];then
-    source $(brew --prefix)/etc/brew-wrap
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    export PATH="/opt/homebrew/bin:$PATH"
+    export HOMEBREW_BREWFILE="${HOME}/Dropbox/Brewfile"
+else
+    eval "$(/usr/local/bin/brew shellenv)"
+    # Load powerlevel10k theme
+    zinit ice depth"1" # git clone depth
+    zinit light romkatv/powerlevel10k
+    typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+    # Load starship theme
+    zinit ice as"command" from"gh-r" \
+            atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+            atpull"%atclone" src"init.zsh"
+    zinit light starship/starship
+fi
 
+
+if [ -f $(brew --prefix)/etc/brew-wrap ];then
+    source $(brew --prefix)/etc/brew-wrap
     _post_brewfile_update () {
         echo "Brewfile was updated!"
     }
-  fi
-else
-  eval "$(/usr/local/bin/brew shellenv)"
 fi
 
 ### Aliases ###

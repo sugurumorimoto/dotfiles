@@ -1,3 +1,12 @@
+# R パッケージのダウンロード元のミラーサイトを設定（東京に固定）
+options(repos = structure(c(CRAN = "http://cran.ism.ac.jp/")))
+
+# R 起動時にライブラリーを自動ロード
+## 起動時にロードするパッケージを追加
+library(tidyverse)
+
+options(vsc.rstudioapi = TRUE)
+
 options(
     radian.color_scheme = "native",
     radian.history_search_no_duplicates = TRUE,
