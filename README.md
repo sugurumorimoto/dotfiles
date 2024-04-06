@@ -7,5 +7,5 @@
 ## Installation
 
 ```shell
-$ curl -sL https://sugurumorimoto.github.io/dotfiles/install.sh | sh
+curl https://github.com/sugurumorimoto/dotfiles/blob/master/install.sh | sh
 ```
