@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 # Define the installation directory with a default value
 INSTALL_DIR="${INSTALL_DIR:-$HOME/repos/github.com/sugurumorimoto/dotfiles}"
