@@ -13,6 +13,9 @@ library(readxl)
 library(ggforce)
 library(corrplot)
 library(ggrepel)
+library(patchwork)
+library(ggtext)
+library(fastDummies)
 
 options(vsc.rstudioapi = TRUE)
 
