@@ -9,3 +9,4 @@ local.*
 *.zsh_history
 .chpwd-recent-dirs
 .zsh_sessions
+config/zsh/.zsh_history
