@@ -103,7 +103,7 @@ esac
   abbrev-alias powerline-daemon="/Users/${users}/.local/bin/powerline-daemon"
   abbrev-alias breup='brew update && brew upgrade'
   # 直下ディレクトリ全てのファイル名検索
-  abbrev-alias figr='fd . | rg'
+  abbrev-alias figr='fd -a . | rg'
   # 直下ディレクトリ全てのファイル内の文章検索
   abbrev-alias stgr='fd . -t f | xargs rg'
   # Reload the shell (i.e. invoke as a login shell)
@@ -168,7 +168,7 @@ function peco-cdr () {
   fi
 }
 zle -N peco-cdr
-bindkey '^E' peco-cdr
+bindkey '^Q' peco-cdr
 
 ## カレントディレクトリ以下のディレクトリ検索・移動
 function find_cd() {
