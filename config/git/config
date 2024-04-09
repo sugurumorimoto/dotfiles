@@ -49,6 +49,7 @@
     path = conf.d/gist.conf
     path = conf.d/github.conf
     path = conf.d/local.conf
+
 [user]
 	name = sugurumorimoto
 	email = woodwood0809@icloud.com
