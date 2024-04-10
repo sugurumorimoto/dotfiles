@@ -1,3 +1,41 @@
+### direnv ###
+.envrc
+
+### Windows ###
+[Dd]esktop.ini
+[Tt]humbs.db
+
+### macOS ###
+.DS_Store
+._*
+
+### Vim ###
+.*.swp
+
+### VS Code ###
+.vscode/*
+
+### C/C++ ###
+compile_commands.json
+compile_flags.txt
+
+### Node.js ###
+node_modules/
+
+### Logs ###
+*.log
+
+### Bundle ###
+.bundle/
+
+### Memo ###
+_MEMO*
+_memo*
+_TODO*
+_todo*
+_TEST*
+_test*
+
 ### Local settings ###
 *.local
 local.*
@@ -10,3 +48,15 @@ local.*
 .chpwd-recent-dirs
 .zsh_sessions
 config/zsh/.zsh_history
+
+#heavy file ###
+.bam
+.bam.bai
+.fq.gz
+.fastq.gz
+.fq
+.fastq
+.sam
+.bed
+.bw
+.bigwig

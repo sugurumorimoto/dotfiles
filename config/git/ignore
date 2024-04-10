@@ -35,3 +35,28 @@ _TODO*
 _todo*
 _TEST*
 _test*
+
+### Local settings ###
+*.local
+local.*
+!local.*.sample
+
+### Zsh cache ###
+*.zwc
+.zcomp*
+*.zsh_history
+.chpwd-recent-dirs
+.zsh_sessions
+config/zsh/.zsh_history
+
+### heavy file ###
+.bam
+.bam.bai
+.fq.gz
+.fastq.gz
+.fq
+.fastq
+.sam
+.bed
+.bw
+.bigwig
