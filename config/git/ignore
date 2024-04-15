@@ -49,14 +49,27 @@ local.*
 .zsh_sessions
 config/zsh/.zsh_history
 
-### heavy file ###
-.bam
-.bam.bai
-.fq.gz
-.fastq.gz
-.fq
-.fastq
-.sam
-.bed
-.bw
-.bigwig
+### file ###
+
+### file ###
+*.bam
+*.bam.bai
+*.fq.gz
+*.fastq.gz
+*.fq
+*.fastq
+*.sam
+*.bed
+*.bw
+*.bigwig
+*.pdf
+*.txt
+*.gtf
+*.fa
+Log.*
+*.out.*
+multiqc_*
+*.html
+*fastqc.zip
+*.gct
+*metrics.tsv
