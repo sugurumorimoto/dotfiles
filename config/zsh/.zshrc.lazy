@@ -81,7 +81,7 @@ esac
   alias pip_freeze='pip freeze --all >| ${HOME}/dotfiles/config/pip/requirements.txt'
 
   #project
-  alias mkpr='mkdir -p {./bin,./script,./data/{fq,bam},./analysis}';touch README.md;cp  ${HOME}/.gitignore .gitignore
+  alias mkpr='mkdir -p {./bin,./script,./data/{fq,bam},./analysis};touch README.md;cp  ${HOME}/.gitignore .gitignore'
 
   # cd
   abbrev-alias ..="cd .."
