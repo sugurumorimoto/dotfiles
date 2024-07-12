@@ -79,7 +79,10 @@ esac
 
   #python
   alias pip_freeze='pip freeze --all >| ${HOME}/dotfiles/config/pip/requirements.txt'
-
+  # on ashbi server
+  # On my own pc
+  alias jupyterforward="python3 /Users/morimotosuguru/Library/CloudStorage/Dropbox/user_morimoto/script/python/login/jupyter_forward.py -i /home/smorimoto/codes/login -s /Users/morimotosuguru/.ssh/id_ed25519 -u smorimoto -ip 130.54.88.170 -slp 33221"
+  #alias jupyterforward="python3 /home/cliff/codes/login/jupyter_forward.py -i /path/to/remote/folder -s /path/to/your_ssh_key_file -u <your_username> -ip <ashibi_ip> -slp <group_port>"
   #project
   alias mkpr='mkdir -p {./bin,./script,./data/{fq,bam},./analysis};touch README.md;cp  ${HOME}/.gitignore .gitignore'
 
@@ -163,6 +166,7 @@ if [[ -n $(echo ${^fpath}/chpwd_recent_dirs(N)) && -n $(echo ${^fpath}/cdr(N)) ]
   zstyle ':chpwd:*' recent-dirs-max 1000
   zstyle ':chpwd:*' recent-dirs-file "$HOME/.cache/chpwd-recent-dirs"
 fi
+
 function peco-cdr () {
   local selected_dir="$(cdr -l | sed 's/^[0-9]* *//' | peco)"
   if [ -n "$selected_dir" ]; then
@@ -183,7 +187,6 @@ function find_cd() {
 }
 zle -N find_cd
 bindkey '^X' find_cd
-
 
 #cd and make dir
 function cmd() {
