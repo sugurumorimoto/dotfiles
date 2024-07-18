@@ -1,6 +1,7 @@
 " Ward off unexpected things that your distro might have made, as
 " well as sanely reset options when re-sourcing .vimrc
 set nocompatible
+set clipboard+=unnamedplus
 
 " Set Dein base path (required)
 let s:dein_base = '/Users/morimotosuguru/.local/share/dein'
