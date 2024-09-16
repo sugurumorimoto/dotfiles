@@ -68,7 +68,8 @@ esac
 : "略語展開(iab)" && {
   # date
   alias dates='date "+%Y-%m-%d %T.%N"'
-  alias today="date '+%Y%m%d'"
+  alias today="date '+%Y%m%d_' | tee >(tr -d '\n' | pbcopy)"
+  alias today_long="date '+%B %d, %Y' | tee >(tr -d '\n' | pbcopy)"
   alias today_="date '+%Y-%m-%d'"
   alias now="date '+%Y%m%d_%H%M%S'"
   alias now_="date '+%Y-%m-%d_%H%M%S'"
@@ -335,6 +336,34 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     pick'gh*/bin/gh' \
     atclone'./gh*/bin/gh completion -s zsh >_gh' atpull'%atclone' \
     @'cli/cli'
+
+
+### eject ###
+# eject 関数の定義
+eject() {
+    # ディスクのリスト
+    local disks=("HD-LXU3_013" "HD-PGAC-A" "ELECOM USBHDD" "MURAKAWALAB" "MORIMTO2")
+
+    # 各ディスクをumount
+    for disk in "${disks[@]}"; do
+        local mount_point="/Volumes/$disk"
+        if [ -d "$mount_point" ]; then
+            echo "Unmounting $mount_point..."
+            diskutil umount "$mount_point"
+            if [ $? -eq 0 ]; then
+                echo "$mount_point has been unmounted."
+            else
+                echo "Failed to unmount $mount_point"
+            fi
+        else
+            echo "$mount_point does not exist."
+        fi
+    done
+
+    echo "All specified disks have been processed."
+}
+
+
 
 ### exa ###
 __exa_atload() {
