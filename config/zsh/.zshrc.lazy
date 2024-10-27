@@ -314,6 +314,7 @@ zinit wait lucid blockf light-mode for \
 
 setopt correct # 入力しているコマンド名が間違っている場合にもしかして：を出す。
 setopt interactive_comments # コマンドラインでも # 以降をコメントと見なす
+unsetopt noclobber #>でファイルを上書き出来るようにする。
 
 ### programs ###
 zinit wait lucid light-mode as'program' from'gh-r' for \
