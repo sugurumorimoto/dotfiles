@@ -12,3 +12,16 @@
   # Set the theme
   theme_set(my_theme)
 }
+
+# .Rprofile または Rprofile.site に追加
+if (interactive()) {
+  suppressMessages({
+    library(conflicted)
+    library(tidyverse)
+
+    # 優先する関数を明示的に指定
+    conflict_prefer("filter", "dplyr")
+    conflict_prefer("select", "dplyr")
+    conflict_prefer("lag", "dplyr")
+  })
+}

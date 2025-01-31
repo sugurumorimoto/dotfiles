@@ -2,20 +2,8 @@ if (interactive() && Sys.getenv("RSTUDIO") == "") {
   source(file.path(Sys.getenv(if (.Platform$OS.type == "windows") "USERPROFILE" else "HOME"), ".vscode-R", "init.R"))
 }
 
-# R パッケージのダウンロード元のミラーサイトを設定（東京に固定）
-options(repos = structure(c(CRAN = "http://cran.ism.ac.jp/")))
-
-# R 起動時にライブラリーを自動ロード
-## 起動時にロードするパッケージを追加
-library(tidyverse)
-library(skimr)
-library(readxl)
-library(ggforce)
-library(corrplot)
-library(ggrepel)
-library(patchwork)
-library(ggtext)
-library(fastDummies)
+# R パッケージのダウンロード元のミラーサイトを設定
+options(repos = structure(c(CRAN = "https://ftp.yz.yamagata-u.ac.jp/pub/cran/")))
 
 options(vsc.rstudioapi = TRUE)
 
