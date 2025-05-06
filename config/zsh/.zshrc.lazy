@@ -364,6 +364,22 @@ eject() {
     echo "All specified disks have been processed."
 }
 
+# すべてのアプリを閉じる関数
+close_all_apps() {
+  osascript <<EOF
+tell application "System Events"
+    set appList to name of (processes where background only is false)
+end tell
+
+repeat with appName in appList
+    if appName is not "Finder" then
+        try
+            tell application appName to quit
+        end try
+    end if
+end repeat
+EOF
+}
 
 
 ### exa ###
