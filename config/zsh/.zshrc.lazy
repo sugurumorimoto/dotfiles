@@ -343,7 +343,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
 # eject 関数の定義
 eject() {
     # ディスクのリスト
-    local disks=("HD-LXU3_013" "HD-PGAC-A" "ELECOM USBHDD" "MURAKAWALAB" "MORIMTO2")
+    local disks=("HD-LXU3_013" "HD-PGAC-A" "ELECOM USBHDD" "MURAKAWALAB" "MORIMTO2" "HD-LE-B")
 
     # 各ディスクをumount
     for disk in "${disks[@]}"; do
