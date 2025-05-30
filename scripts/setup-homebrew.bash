@@ -39,9 +39,9 @@ brew install mas
 #  installing apps
 # =====================
 echo "Installing Homebrew apps..."
-rm ${REPO_DIR}/config/homebrew/Brewfile
-git clone https://github.com/sugurumorimoto/Brewfile.git ${REPO_DIR}/config/homebrew
-brew install ${REPO_DIR}/config/homebrew/Brewfile
+rm -f "${REPO_DIR}/config/homebrew/Brewfile"
+git clone https://github.com/sugurumorimoto/Brewfile.git "${REPO_DIR}/config/homebrew"
+brew bundle --file="${REPO_DIR}/config/homebrew/Brewfile"
 
 
 echo "set git repository　git@github.com:sugurumorimoto/Brewfile.git"
@@ -63,7 +63,7 @@ git clone https://github.com/amashigeseiji/anyenv-lazyload.git ~/.anyenv/plugins
 #pyenv
 pyenv install miniforge3
 pyenv global miniforge3
-pip install -r ${REPO_DIR}/config/pip/requirements.txt
+pip install -r "${REPO_DIR}/config/pip/requirements.txt"
 
 #atcoder
 brew install nvm

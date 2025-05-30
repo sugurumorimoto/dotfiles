@@ -285,7 +285,7 @@ defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool t
 ###############################################################################
 
 
-defaults write com.googlecode.iterm2 PrefsCustomFolder ${iterm2_preference}
+defaults write com.googlecode.iterm2 PrefsCustomFolder "${iterm2_preference}"
 
 # Automatically download apps purchased on other Macs
 defaults write com.apple.SoftwareUpdate ConfigDataInstall -int 1
