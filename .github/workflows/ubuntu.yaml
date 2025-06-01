@@ -8,5 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Setup
         run: curl -sL https://raw.githubusercontent.com/sugurumorimoto/dotfiles/master/install.sh | sh

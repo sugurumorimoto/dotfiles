@@ -39,13 +39,14 @@ brew install mas
 #  installing apps
 # =====================
 echo "Installing Homebrew apps..."
-rm -f "${REPO_DIR}/config/homebrew/Brewfile"
-git clone https://github.com/sugurumorimoto/Brewfile.git "${REPO_DIR}/config/homebrew"
-brew bundle --file="${REPO_DIR}/config/homebrew/Brewfile"
-
+# rm -f "${REPO_DIR}/config/homebrew/Brewfile"
+# git clone https://github.com/sugurumorimoto/Brewfile.git "${REPO_DIR}/config/homebrew"
+# brew bundle --file="${REPO_DIR}/config/homebrew/Brewfile"
 
 echo "set git repository　git@github.com:sugurumorimoto/Brewfile.git"
 brew file set_repo
+brew init
+brew file install
 ###########################################################################
 # Set Brewfile repository as https://github.com/sugurumorimoto/Brewfile.git
 ###########################################################################
