@@ -9,4 +9,4 @@ jobs:
 
     steps:
       - name: Setup
-        run: curl -sL https://raw.githubusercontent.com/sugurumorimoto/dotfiles/master/install.sh | sh
+        run: curl -sL https://raw.githubusercontent.com/sugurumorimoto/dotfiles/0631b319c64505b99ba57cf3770771175834ac35/install.sh | bash
