@@ -14,7 +14,7 @@ conda env list | grep -v "^#" | awk '{print $1}' | while read -r env_name; do
     # Check if the environment name is not empty
     if [ -n "$env_name" ]; then
         # Remove '*' if it's part of the environment name
-        cleaned_env_name=$(echo "$env_name" | sed 's/\*//g')
+        cleaned_env_name=${env_name//\*/}
 
         # Also process 'base' environment and environment names that are paths
         # If you want to exclude specific environments, add a conditional branch here
@@ -26,9 +26,7 @@ conda env list | grep -v "^#" | awk '{print $1}' | while read -r env_name; do
         echo "Exporting environment: $cleaned_env_name to $yaml_file"
 
         # Export the Conda environment to a YAML file
-        conda env export -n "$cleaned_env_name" > "$yaml_file"
-
-        if [ $? -eq 0 ]; then
+        if conda env export -n "$cleaned_env_name" > "$yaml_file"; then
             echo "Successfully exported $cleaned_env_name to $yaml_file"
         else
             echo "Failed to export $cleaned_env_name. Make sure the environment exists and Conda is configured correctly."

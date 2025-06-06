@@ -29,9 +29,7 @@ for yaml_file in "$CONDA_CONFIG_DIR"/*_environment.yaml; do
     echo "Creating conda environment: $env_name from $yaml_file"
 
     # Create conda environment from YAML file
-    conda env create -f "$yaml_file" -n "$env_name"
-
-    if [ $? -eq 0 ]; then
+    if conda env create -f "$yaml_file" -n "$env_name"; then
         echo "Successfully created environment: $env_name"
     else
         echo "Failed to create environment: $env_name"
