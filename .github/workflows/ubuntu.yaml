@@ -12,4 +12,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup
-        run: curl -sL https://raw.githubusercontent.com/sugurumorimoto/dotfiles/install.sh | bash
+        run: curl -sL https://raw.githubusercontent.com/sugurumorimoto/dotfiles/master/install.sh | sh
