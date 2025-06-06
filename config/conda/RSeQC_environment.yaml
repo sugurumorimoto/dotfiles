@@ -1,0 +1,6 @@
+name: RSeQC
+channels:
+  - defaults
+  - conda-forge
+  - bioconda
+prefix: /Users/morimotosuguru/.anyenv/envs/pyenv/versions/miniforge3-4.9.2/envs/RSeQC
