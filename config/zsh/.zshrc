@@ -98,3 +98,10 @@ zinit wait lucid null for \
 #     tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
 # fi
 export PATH=/Users/morimotosuguru/edirect:${PATH}
+
+# Add SSH keys to the ssh-agent
+for key in $HOME/.ssh/*; do
+  if [[ -f "$key" && "$key" != *.pub ]]; then
+    ssh-add --apple-use-keychain "$key" 2>/dev/null
+  fi
+done

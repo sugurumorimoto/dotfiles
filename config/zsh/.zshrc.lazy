@@ -537,13 +537,14 @@ if [ "${arch_name}" = "x86_64" ]; then
     source ~/.start_miniconda3.sh
 elif [ "${arch_name}" = "arm64" ]; then
     echo "Running on ARM64"
-    #source ~/.start_miniforge3.sh
     #anyenv
     eval "$(anyenv lazyload)"
     alias pyenv="SDKROOT=$(xcrun --show-sdk-path) pyenv"
     export PATH="${HOME}/.anyenv/envs/pyenv/shims:$PATH"
     export PATH="${HOME}/.local/bin:$PATH"
     alias python='python3'
+    CONDA_BASE=$(conda info --base)
+    source "$CONDA_BASE/etc/profile.d/conda.sh"
 else
     echo "Unknown architecture: ${arch_name}"
 fi
