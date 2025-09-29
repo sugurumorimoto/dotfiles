@@ -10,10 +10,8 @@ else
     zinit light romkatv/powerlevel10k
     typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
     # Load starship theme
-    zinit ice as"command" from"gh-r" \
-            atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-            atpull"%atclone" src"init.zsh"
-    zinit light starship/starship
+    zinit ice from"gh-r" as"program" bpick"*x86_64-apple-darwin*.tar.gz" pick"starship"
+    zinit load starship/starship
 fi
 
 
