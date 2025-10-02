@@ -93,9 +93,13 @@ esac
 
   abbrev-alias zsh-startuptime='for i in $(seq 1 10); do time zsh -i -c exit > /dev/null ; done' # zsh起動速度計算
   abbrev-alias brew-push='brew-file push'
-  abbrev-alias ls='exa -a' # G: macOSで色を付ける
-  abbrev-alias ll='exa -alhg --group-directories-first --git --time-style long-iso'
-  abbrev-alias l1="ls -1G"
+  #abbrev-alias ls='eza -a' # G: macOSで色を付ける
+  #abbrev-alias ll='eza -alhg --group-directories-first --git --time-style long-iso'
+  #abbrev-alias l1="ls -1G"
+  alias ls='eza --group-directories-first'
+  alias la='eza --group-directories-first -a'
+  alias ll='eza --group-directories-first -al --header --color-scale --git --icons --time-style=long-iso'
+  alias tree='eza --group-directories-first -T --icons'
   abbrev-alias Mycheck="sudo smartctl --all /dev/disk0" # SSD書き込み量など確認
   abbrev-alias pwg="pwgen -s -B -n -c 8 1"
   abbrev-alias pwgs="pwgen -s -B -n -c -y 8 1"
@@ -166,6 +170,7 @@ if [[ -n $(echo ${^fpath}/chpwd_recent_dirs(N)) && -n $(echo ${^fpath}/cdr(N)) ]
   zstyle ':chpwd:*' recent-dirs-file "$HOME/.cache/chpwd-recent-dirs"
 fi
 
+# 最近使ったディレクトリからpecoで選択して移動するウィジェット
 function peco-cdr () {
   local selected_dir="$(cdr -l | sed 's/^[0-9]* *//' | peco)"
   if [ -n "$selected_dir" ]; then
@@ -177,6 +182,7 @@ zle -N peco-cdr
 bindkey '^Q' peco-cdr
 
 ## カレントディレクトリ以下のディレクトリ検索・移動
+# カレント配下のディレクトリをpecoで探して移動するウィジェット
 function find_cd() {
   local selected_dir=$(find . -type d | peco)
   if [ -n "$selected_dir" ]; then
@@ -188,6 +194,7 @@ zle -N find_cd
 bindkey '^X' find_cd
 
 #cd and make dir
+# ディレクトリ作成と移動を同時に行うヘルパー
 function cmd() {
     mkdir -p $1;
     cd $1;
@@ -198,6 +205,7 @@ function cmd() {
   [ -z "$ENHANCD_ROOT" ] && function chpwd { tree -L 1 } # enhancdがない場合
   [ -z "$ENHANCD_ROOT" ] || export ENHANCD_HOOK_AFTER_CD="tree -L 1" # enhancdがあるときはそのHook機構を使う
 }
+# fzfでディレクトリを選びながら移動できるようにしたcdラッパー
 function cd() {
     if [[ "$#" != 0 ]]; then
         builtin cd "$@";
@@ -219,6 +227,7 @@ function cd() {
 }
 
 #man
+# manページをカラー表示するラッパー
 man() {
   command env \
     LESS_TERMCAP_mb=$(printf "\e[1;31m") \
@@ -236,6 +245,7 @@ man() {
 (( ${+commands[trash]} )) && alias rm='trash'
 
 ##コマンド中央に移動
+# カーソルを現在の入力の中央へ移動させるZLEウィジェット
 function jump_middle() {
     CURSOR=$((${#BUFFER} / 2))
     zle redisplay
@@ -244,6 +254,7 @@ zle -N jump_middle
 bindkey "^j" jump_middle
 
 
+# Git管理下を基準にディレクトリをfzfで検索して移動
 j() {
     local root dir
     root="${$(git rev-parse --show-cdup 2>/dev/null):-.}"
@@ -254,6 +265,7 @@ j() {
     fi
 }
 
+# Gitプロジェクトのルートへ一発で移動
 jj() {
     local root
     root="$(git rev-parse --show-toplevel)" || return 1
@@ -261,11 +273,13 @@ jj() {
 }
 
 ### path ###
+# PATH操作用のユーティリティ関数
 path_append ()  { path_remove $1; export PATH="$PATH:$1"; }
 path_prepend () { path_remove $1; export PATH="$1:$PATH"; }
 path_remove ()  { export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`; }
 
 ### diff ###
+# diffコマンドをbatでカラー表示するラッパー
 diff() { command diff "$@" | bat --paging=never --plain --language=diff }
 alias diffall='diff --new-line-format="+%L" --old-line-format="-%L" --unchanged-line-format=" %L"'
 
@@ -286,6 +300,7 @@ alias batman='bat --language=man --plain'
 export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
 
 ### zsh-history-substring-search ###
+# 履歴部分一致検索プラグインのキー割り当てを初期化
 __zsh_history_substring_search_atload() {
     bindkey "${terminfo[kcuu1]}" history-substring-search-up   # arrow-up
     bindkey "${terminfo[kcud1]}" history-substring-search-down # arrow-down
@@ -321,6 +336,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     pick'ripgrep*/rg'   @'BurntSushi/ripgrep'
 
 ### asdf-vm ###
+# asdfプラグイン読み込み時の環境変数を初期化
 __asdf_atload() {
     export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
     export ASDF_CONFIG_FILE="$XDG_CONFIG_HOME/asdf/asdfrc"
@@ -339,6 +355,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
 
 ### eject ###
 # eject 関数の定義
+# 登録済みの外付けディスクをまとめてアンマウントする
 eject() {
     # ディスクのリスト
     local disks=("HD-LXU3_013" "HD-PGAC-A" "ELECOM USBHDD" "MURAKAWALAB" "MORIMTO2" "HD-LE-B")
@@ -363,6 +380,7 @@ eject() {
 }
 
 # すべてのアプリを閉じる関数
+# Finder以外のGUIアプリケーションをすべて終了させる
 close_all_apps() {
   osascript <<EOF
 tell application "System Events"
@@ -380,18 +398,20 @@ EOF
 }
 
 
-### exa ###
-__exa_atload() {
-    alias ls='exa --group-directories-first'
-    alias la='exa --group-directories-first -a'
-    alias ll='exa --group-directories-first -al --header --color-scale --git --icons --time-style=long-iso'
-    alias tree='exa --group-directories-first -T --icons'
-}
-zinit wait lucid light-mode as'program' from'gh-r' for \
-    pick'bin/exa' \
-    atclone'cp -f completions/exa.zsh _exa' atpull'%atclone' \
-    atload'__exa_atload' \
-    @'ogham/exa'
+### eza ###
+# exa読み込み時に各種aliasを設定
+#__exa_atload() {
+#    alias ls='eza --group-directories-first'
+#    alias la='eza --group-directories-first -a'
+#    alias ll='eza --group-directories-first -al --header --color-scale --git --icons --time-style=long-iso'
+#    alias tree='eza --group-directories-first -T --icons'
+#}
+
+#zinit wait lucid light-mode as'program' from'gh-r' for \
+#    pick'bin/exa' \
+#    atclone'cp -f completions/exa.zsh _exa' atpull'%atclone' \
+#    atload'__exa_atload' \
+#    @'ogham/exa'
 
 ### yq ###
 zinit wait lucid light-mode as'program' from'gh-r' for \
@@ -400,6 +420,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     @'mikefarah/yq'
 
 ### hgrep ###
+# hgrep読み込み時に隠しファイル検索を有効化
 __hgrep_atload() {
     alias hgrep="hgrep --hidden --glob='!.git/'"
 }
@@ -409,10 +430,12 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     @'rhysd/hgrep'
 
 ### navi ###
+# naviから選択したスニペットを現在の入力に展開
 __navi_search() {
     LBUFFER="$(navi --print --query="$LBUFFER")"
     zle reset-prompt
 }
+# navi読み込み時にウィジェットとキー割り当てを初期化
 __navi_atload() {
     export NAVI_CONFIG="$XDG_CONFIG_HOME/navi/config.yaml"
 
@@ -424,6 +447,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     @'denisidoro/navi'
 
 ### Forgit ###
+# forgit読み込み時の環境変数を初期化
 __forgit_atload() {
     export FORGIT_INSTALL_DIR="$PWD"
     export FORGIT_NO_ALIASES=1
@@ -455,6 +479,7 @@ alias make='make -j$(($(nproc)+1))'
 ### CMake ###
 alias cmaked='cmake -DCMAKE_BUILD_TYPE=Debug -B "$(git rev-parse --show-toplevel)/build"'
 alias cmakerel='cmake -DCMAKE_BUILD_TYPE=Release -B "$(git rev-parse --show-toplevel)/build"'
+# CMakeビルド/テストを省力化するヘルパー
 cmakeb() { cmake --build "${1:-$(git rev-parse --show-toplevel)/build}" -j"$(($(nproc)+1))" "${@:2}" }
 cmaket() { ctest --verbose --test-dir "${1:-$(git rev-parse --show-toplevel)/build}" "${@:2}" }
 
@@ -465,6 +490,7 @@ export EDITOR="code"
 
 export GIT_EDITOR="$EDITOR"
 
+# EDITORを使ってファイルを開くヘルパー
 e() {
     if [ $# -eq 0 ]; then
         local selected="$(fd --hidden --color=always --type=f  | fzf --exit-0 --multi --preview="fzf-preview-file {}" --preview-window="right:60%")"

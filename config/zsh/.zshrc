@@ -1,9 +1,9 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# # Initialization code that may require console input (password prompts, [y/n]
+# # confirmations, etc.) must go above this block; everything else may go below.
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 ### zinit ###
 typeset -gAH ZINIT
@@ -14,10 +14,13 @@ ZINIT[ZCOMPDUMP_PATH]="$XDG_STATE_HOME/zcompdump"
 typeset -U path
 typeset -U fpath
 
+# zinitの主要なデータ配置先をXDG Base Directoryに追従させる
+
 path=(
     "/usr/local/bin(N-/)"
     "$HOME/.local/bin"(N-/)
     "$CARGO_HOME/bin"(N-/)
+# PATHとFPATHをXDG配下や各種ツールのbinディレクトリへ寄せる
     "$GOPATH/bin"(N-/)
     "$DENO_INSTALL/bin"(N-/)
     "$GEM_HOME/bin"(N-/)
@@ -39,6 +42,8 @@ if [[ ! -f ${ZINIT[HOME_DIR]}/bin/zinit.zsh ]]; then
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 
+# zinit本体が未導入の場合は自動でcloneする
+
 source "${ZINIT[HOME_DIR]}/bin/zinit.zsh"
 
 autoload -Uz _zinit
@@ -55,17 +60,23 @@ zinit light-mode for \
 
 ### theme ###
 # Load the pure theme, with zsh-async library that's bundled with it.
-zinit ice wait'!0';zplugin ice pick"async.zsh" src "pure.zsh"
-zinit ice wait'!0';zplugin light sindresorhus/pure
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
 
 # Preztoのセットアップ
-zinit ice wait'!0'; zinit snippet PZT::modules/helper/init.zsh
-zinit ice wait'!0'; zinit snippet PZT::modules/history/init.zsh ### history ###
+# zinit ice wait'!0'; zinit snippet PZT::modules/helper/init.zsh
+# zinit ice wait'!0'; zinit snippet PZT::modules/history/init.zsh ### history ###
+zinit snippet PZT::modules/helper/init.zsh
+zinit snippet PZT::modules/history/init.zsh
+
+# pureテーマと必要な非同期ライブラリを遅延読み込み
 export HISTFILE="$XDG_STATE_HOME/zsh_history"
+
 #ref;https://www.m3tech.blog/entry/dotfiles-bonsai
 zshaddhistory() {
     local line="${1%%$'\n'}"
-    [[ ! "$line" =~ "^(cd|jj?|lazygit|la|ll|ls|rm|rmdir|brew)($| )" ]]
+# 最低限のhelper/historyモジュールのみ利用
+    [[ ! "$line" =~ "^(cd|jj?|lazygit|la|ll|ls|rm|rmdir)($| )" ]]
 }
 
 #cd
@@ -79,12 +90,15 @@ zinit light momo-lab/zsh-abbrev-alias
 zinit ice wait'!0'; zinit snippet OMZ::plugins/macos/macos.plugin.zsh
 
 # anyframeのセットアップ
+# コマンド短縮入力を自動展開するプラグイン
 zinit light mollifier/anyframe
 # Ctrl+x -> b
 # peco でディレクトリの移動履歴を表示
+# macOS固有の便利関数群
 bindkey '^wf' anyframe-widget-cdr
 bindkey '^wd' anyframe-widget-execute-history
 
+# 履歴やディレクトリ移動をpecoウィジェット化
 ### plugins ###
 zinit wait lucid null for \
     atinit'source "$XDG_CONFIG_HOME/zsh/.zshrc.lazy"' \
@@ -105,3 +119,5 @@ for key in $HOME/.ssh/*; do
     ssh-add --apple-use-keychain "$key" 2>/dev/null
   fi
 done
+
+# SSH秘密鍵(公開鍵以外)をmacOSのキーチェーンサポート付きで追加
