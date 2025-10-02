@@ -1,0 +1,28 @@
+if (interactive() && Sys.getenv("RSTUDIO") == "") {
+  source(file.path(Sys.getenv(if (.Platform$OS.type == "windows") "USERPROFILE" else "HOME"), ".vscode-R", "init.R"))
+}
+
+# R パッケージのダウンロード元のミラーサイトを設定
+options(repos = structure(c(CRAN = "https://ftp.yz.yamagata-u.ac.jp/pub/cran/")))
+
+options(vsc.rstudioapi = TRUE)
+
+options(
+    radian.color_scheme = "native",
+    radian.history_search_no_duplicates = TRUE,
+    radian.auto_match = TRUE,
+    radian.completion_timeout = 0
+    # radian.editing_mode = "vi"
+    # radian.history_size = 100
+    # radian.auto_suggest = TRUE
+    # radian.indent_lines = FALSE
+    # radian.insert_new_line = FALSE,
+    # radian.auto_match.auto_indentation = FALSE
+    # radian.complete_commit_on_tab = TRUE
+    # radian.complete_while_typing = FALSE
+)
+
+options(radian.escape_key_map = list(
+    list(key = "-", value = " <- "),
+    list(key = "m", value = " %>% ")
+))
