@@ -80,14 +80,14 @@ zshaddhistory() {
 }
 
 #cd
-zinit ice wait'!0'; zinit snippet PZT::modules/directory/init.zsh
+zinit snippet PZT::modules/directory/init.zsh
 setopt AUTO_CD                # ディレクトリ名だけを入力した時にそこに cd する
 
 #abbrev-alias
 zinit light momo-lab/zsh-abbrev-alias
 
 #finder
-zinit ice wait'!0'; zinit snippet OMZ::plugins/macos/macos.plugin.zsh
+zinit snippet OMZ::plugins/macos/macos.plugin.zsh
 
 # anyframeのセットアップ
 # コマンド短縮入力を自動展開するプラグイン
