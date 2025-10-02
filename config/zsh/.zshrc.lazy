@@ -379,6 +379,23 @@ eject() {
     echo "All specified disks have been processed."
 }
 
+### extract ###
+# extract 関数の定義
+# ファイルを展開する
+extract() {
+  if [ -f "$1" ]; then
+    case "$1" in
+      *.tar.bz2) echo "Running: tar xvjf $1"; tar xvjf "$1" ;;
+      *.tar.gz)  echo "Running: tar xvzf $1"; tar xvzf "$1" ;;
+      *.zip)     echo "Running: unzip $1"; unzip "$1" ;;
+      *.rar)     echo "Running: unrar x $1"; unrar x "$1" ;;
+      *)         echo "File type not supported" ;;
+    esac
+  else
+    echo "File $1 does not exist"
+  fi
+}
+
 # すべてのアプリを閉じる関数
 # Finder以外のGUIアプリケーションをすべて終了させる
 close_all_apps() {
