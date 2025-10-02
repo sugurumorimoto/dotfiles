@@ -42,7 +42,7 @@ case "$OSTYPE" in
         alias p='cat /dev/clipboard'
     ;;
     darwin*)
-        #GNU系ツールに置換
+        # Replace with GNU tools
         alias pp='pbcopy'
         alias p='pbpaste'
         alias chrome='open -a "Google Chrome"'
@@ -63,7 +63,7 @@ case "$OSTYPE" in
     ;;
 esac
 
-: "略語展開(iab)" && {
+: "Abbreviation expansion (iab)" && {
   # date
   alias dates='date "+%Y-%m-%d %T.%N"'
   alias today="date '+%Y%m%d_' | tee >(tr -d '\n' | pbcopy)"
@@ -72,17 +72,17 @@ esac
   alias now="date '+%Y%m%d_%H%M%S'"
   alias now_="date '+%Y-%m-%d_%H%M%S'"
 
-  # 言語
+  # Language settings
   alias utf='export LANG=ja_JP.UTF-8; export LANGUAGE=ja_JP.UTF-8; export LC_ALL=ja_JP.UTF-8'
   alias en='export LANG=en; export LANGUAGE=en; export LC_ALL=en'
 
-  #python
+  # python
   alias pip_freeze='pip freeze --all >| ${HOME}/dotfiles/config/pip/requirements.txt'
   # on ashbi server
   # On my own pc
   alias jupyterforward="python3 /Users/morimotosuguru/Library/CloudStorage/Dropbox/user_morimoto/script/python/login/jupyter_forward.py -i /home/smorimoto/codes/login -s /Users/morimotosuguru/.ssh/id_ed25519 -u smorimoto -ip 130.54.88.170 -slp 33221"
   #alias jupyterforward="python3 /home/cliff/codes/login/jupyter_forward.py -i /path/to/remote/folder -s /path/to/your_ssh_key_file -u <your_username> -ip <ashibi_ip> -slp <group_port>"
-  #project
+  # project
   alias mkpr='mkdir -p {./bin,./script,./data/{fq,bam},./analysis};touch README.md;cp  ${HOME}/.gitignore .gitignore'
 
   # cd
@@ -111,10 +111,10 @@ esac
   abbrev-alias brews='brew list -1'
   abbrev-alias powerline-daemon="/Users/${users}/.local/bin/powerline-daemon"
   abbrev-alias breup='brew update && brew upgrade'
-  # 直下ディレクトリ全てのファイル名検索
-  abbrev-alias figr='fd -a . | rg' # Search all filenames under the current directory
-  # 直下ディレクトリ全てのファイル内の文章検索
-  abbrev-alias stgr='fd . -t f | xargs rg' # Search file contents under the current directory
+  # Search all filenames under the current directory
+  abbrev-alias figr='fd -a . | rg'
+  # Search file contents under the current directory
+  abbrev-alias stgr='fd . -t f | xargs rg'
   # Reload the shell (i.e. invoke as a login shell)
   abbrev-alias reload="exec ${SHELL} -l"
   # Print each PATH entry on a separate line
@@ -151,7 +151,8 @@ esac
   abbrev-alias -g a15="awk '{print \$15}'"
   abbrev-alias -g a16="awk '{print \$16}'"
   abbrev-alias myzcomp='for f in $(fd -t f | grep ".zsh"); do zcompile $f; done'
-  abbrev-alias -g and="|" # パイプが遠いのでandを割り当てる。例えば`tail -f ./log | grep error`を`tail -f ./log and grep error`と書くことができる
+  # Assign 'and' as pipe is far away. For example, `tail -f ./log | grep error` can be written as `tail -f ./log and grep error`
+  abbrev-alias -g and="|"
 }
 
 
@@ -160,7 +161,7 @@ esac
 zinit ice wait'!0'; zinit snippet PZT::modules/directory/init.zsh
 zinit ice wait'!0'; zinit light b4b4r07/enhancd
 
-## コマンド履歴からディレクトリ検索・移動
+## Search and navigate to directories from command history
 if [[ -n $(echo ${^fpath}/chpwd_recent_dirs(N)) && -n $(echo ${^fpath}/cdr(N)) ]]; then
   autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
   add-zsh-hook chpwd chpwd_recent_dirs
@@ -170,7 +171,7 @@ if [[ -n $(echo ${^fpath}/chpwd_recent_dirs(N)) && -n $(echo ${^fpath}/cdr(N)) ]
   zstyle ':chpwd:*' recent-dirs-file "$HOME/.cache/chpwd-recent-dirs"
 fi
 
-# 最近使ったディレクトリからpecoで選択して移動するウィジェット
+# Widget to select from recently used directories with peco and navigate
 function peco-cdr () {
   local selected_dir="$(cdr -l | sed 's/^[0-9]* *//' | peco)"
   if [ -n "$selected_dir" ]; then
@@ -181,8 +182,8 @@ function peco-cdr () {
 zle -N peco-cdr
 bindkey '^Q' peco-cdr
 
-## カレントディレクトリ以下のディレクトリ検索・移動
-# カレント配下のディレクトリをpecoで探して移動するウィジェット
+## Search and navigate directories under current directory
+# Widget to search directories under current directory with peco and navigate
 function find_cd() {
   local selected_dir=$(find . -type d | peco)
   if [ -n "$selected_dir" ]; then
@@ -193,19 +194,19 @@ function find_cd() {
 zle -N find_cd
 bindkey '^X' find_cd
 
-#cd and make dir
-# ディレクトリ作成と移動を同時に行うヘルパー
+# cd and make dir
+# Helper to create directory and navigate simultaneously
 function cmd() {
     mkdir -p $1;
     cd $1;
 }
 
-#cd
-: "cd先のディレクトリのファイル一覧を表示する" && {
-  [ -z "$ENHANCD_ROOT" ] && function chpwd { tree -L 1 } # enhancdがない場合
-  [ -z "$ENHANCD_ROOT" ] || export ENHANCD_HOOK_AFTER_CD="tree -L 1" # enhancdがあるときはそのHook機構を使う
+# cd
+: "Display file list of the directory after cd" && {
+  [ -z "$ENHANCD_ROOT" ] && function chpwd { tree -L 1 } # When enhancd is not available
+  [ -z "$ENHANCD_ROOT" ] || export ENHANCD_HOOK_AFTER_CD="tree -L 1" # Use enhancd's Hook mechanism when available
 }
-# fzfでディレクトリを選びながら移動できるようにしたcdラッパー
+# cd wrapper that allows interactive directory selection with fzf
 function cd() {
     if [[ "$#" != 0 ]]; then
         builtin cd "$@";
@@ -226,8 +227,8 @@ function cd() {
     done
 }
 
-#man
-# manページをカラー表示するラッパー
+# man
+# Wrapper to display man pages with color
 man() {
   command env \
     LESS_TERMCAP_mb=$(printf "\e[1;31m") \
@@ -241,11 +242,11 @@ man() {
     man "$@"
 }
 
-#trash
+# trash
 (( ${+commands[trash]} )) && alias rm='trash'
 
-##コマンド中央に移動
-# カーソルを現在の入力の中央へ移動させるZLEウィジェット
+## Move cursor to the middle of the command line
+# ZLE widget to move cursor to the center of current input
 function jump_middle() {
     CURSOR=$((${#BUFFER} / 2))
     zle redisplay
@@ -254,7 +255,7 @@ zle -N jump_middle
 bindkey "^j" jump_middle
 
 
-# Git管理下を基準にディレクトリをfzfで検索して移動
+# Search and navigate directories with fzf based on Git root
 j() {
     local root dir
     root="${$(git rev-parse --show-cdup 2>/dev/null):-.}"
@@ -265,7 +266,7 @@ j() {
     fi
 }
 
-# Gitプロジェクトのルートへ一発で移動
+# Navigate to Git project root in one command
 jj() {
     local root
     root="$(git rev-parse --show-toplevel)" || return 1
@@ -273,13 +274,13 @@ jj() {
 }
 
 ### path ###
-# PATH操作用のユーティリティ関数
+# Utility functions for PATH manipulation
 path_append ()  { path_remove $1; export PATH="$PATH:$1"; }
 path_prepend () { path_remove $1; export PATH="$1:$PATH"; }
 path_remove ()  { export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//'`; }
 
 ### diff ###
-# diffコマンドをbatでカラー表示するラッパー
+# Wrapper to display diff command output with color using bat
 diff() { command diff "$@" | bat --paging=never --plain --language=diff }
 alias diffall='diff --new-line-format="+%L" --old-line-format="-%L" --unchanged-line-format=" %L"'
 
@@ -300,7 +301,7 @@ alias batman='bat --language=man --plain'
 export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/config"
 
 ### zsh-history-substring-search ###
-# 履歴部分一致検索プラグインのキー割り当てを初期化
+# Initialize key bindings for history substring search plugin
 __zsh_history_substring_search_atload() {
     bindkey "${terminfo[kcuu1]}" history-substring-search-up   # arrow-up
     bindkey "${terminfo[kcud1]}" history-substring-search-down # arrow-down
@@ -325,9 +326,9 @@ zinit wait lucid blockf light-mode for \
     @'zdharma-continuum/history-search-multi-word' \
     @'zdharma-continuum/fast-syntax-highlighting'
 
-setopt correct # 入力しているコマンド名が間違っている場合にもしかして：を出す。
-setopt interactive_comments # コマンドラインでも # 以降をコメントと見なす
-unsetopt noclobber #>でファイルを上書き出来るようにする。
+setopt correct # Show "did you mean:" when the command name being typed is wrong
+setopt interactive_comments # Treat # and following as comments on the command line
+unsetopt noclobber # Allow overwriting files with >
 
 ### programs ###
 zinit wait lucid light-mode as'program' from'gh-r' for \
@@ -336,7 +337,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     pick'ripgrep*/rg'   @'BurntSushi/ripgrep'
 
 ### asdf-vm ###
-# asdfプラグイン読み込み時の環境変数を初期化
+# Initialize environment variables when loading asdf plugin
 __asdf_atload() {
     export ASDF_DATA_DIR="$XDG_DATA_HOME/asdf"
     export ASDF_CONFIG_FILE="$XDG_CONFIG_HOME/asdf/asdfrc"
@@ -354,13 +355,13 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
 
 
 ### eject ###
-# eject 関数の定義
-# 登録済みの外付けディスクをまとめてアンマウントする
+# eject function definition
+# Unmount all registered external disks at once
 eject() {
-    # ディスクのリスト
+    # List of disks
     local disks=("HD-LXU3_013" "HD-PGAC-A" "ELECOM USBHDD" "MURAKAWALAB" "MORIMTO2" "HD-LE-B")
 
-    # 各ディスクをumount
+    # Unmount each disk
     for disk in "${disks[@]}"; do
         local mount_point="/Volumes/$disk"
         if [ -d "$mount_point" ]; then
@@ -380,8 +381,8 @@ eject() {
 }
 
 ### extract ###
-# extract 関数の定義
-# ファイルを展開する
+# extract function definition
+# Extract files
 extract() {
   if [ -f "$1" ]; then
     case "$1" in
@@ -396,8 +397,8 @@ extract() {
   fi
 }
 
-# すべてのアプリを閉じる関数
-# Finder以外のGUIアプリケーションをすべて終了させる
+# Function to close all apps
+# Quit all GUI applications except Finder
 close_all_apps() {
   osascript <<EOF
 tell application "System Events"
@@ -416,7 +417,7 @@ EOF
 
 
 ### eza ###
-# exa読み込み時に各種aliasを設定
+# Set various aliases when loading exa
 #__exa_atload() {
 #    alias ls='eza --group-directories-first'
 #    alias la='eza --group-directories-first -a'
@@ -437,7 +438,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     @'mikefarah/yq'
 
 ### hgrep ###
-# hgrep読み込み時に隠しファイル検索を有効化
+# Enable hidden file search when loading hgrep
 __hgrep_atload() {
     alias hgrep="hgrep --hidden --glob='!.git/'"
 }
@@ -447,12 +448,12 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     @'rhysd/hgrep'
 
 ### navi ###
-# naviから選択したスニペットを現在の入力に展開
+# Expand snippet selected from navi to current input
 __navi_search() {
     LBUFFER="$(navi --print --query="$LBUFFER")"
     zle reset-prompt
 }
-# navi読み込み時にウィジェットとキー割り当てを初期化
+# Initialize widget and key bindings when loading navi
 __navi_atload() {
     export NAVI_CONFIG="$XDG_CONFIG_HOME/navi/config.yaml"
 
@@ -464,7 +465,7 @@ zinit wait lucid light-mode as'program' from'gh-r' for \
     @'denisidoro/navi'
 
 ### Forgit ###
-# forgit読み込み時の環境変数を初期化
+# Initialize environment variables when loading forgit
 __forgit_atload() {
     export FORGIT_INSTALL_DIR="$PWD"
     export FORGIT_NO_ALIASES=1
@@ -496,7 +497,7 @@ alias make='make -j$(($(nproc)+1))'
 ### CMake ###
 alias cmaked='cmake -DCMAKE_BUILD_TYPE=Debug -B "$(git rev-parse --show-toplevel)/build"'
 alias cmakerel='cmake -DCMAKE_BUILD_TYPE=Release -B "$(git rev-parse --show-toplevel)/build"'
-# CMakeビルド/テストを省力化するヘルパー
+# Helper to simplify CMake build/test
 cmakeb() { cmake --build "${1:-$(git rev-parse --show-toplevel)/build}" -j"$(($(nproc)+1))" "${@:2}" }
 cmaket() { ctest --verbose --test-dir "${1:-$(git rev-parse --show-toplevel)/build}" "${@:2}" }
 
@@ -507,7 +508,7 @@ export EDITOR="code"
 
 export GIT_EDITOR="$EDITOR"
 
-# EDITORを使ってファイルを開くヘルパー
+# Helper to open files using EDITOR
 e() {
     if [ $# -eq 0 ]; then
         local selected="$(fd --hidden --color=always --type=f  | fzf --exit-0 --multi --preview="fzf-preview-file {}" --preview-window="right:60%")"
@@ -578,7 +579,7 @@ if [ "${arch_name}" = "x86_64" ]; then
     source ~/.start_miniconda3.sh
 elif [ "${arch_name}" = "arm64" ]; then
     echo "Running on ARM64"
-    #anyenv
+    # anyenv
     eval "$(anyenv lazyload)"
     alias pyenv="SDKROOT=$(xcrun --show-sdk-path) pyenv"
     export PATH="${HOME}/.anyenv/envs/pyenv/shims:$PATH"
@@ -591,7 +592,7 @@ else
 fi
 
 ### R ###
-#Radian https://github.com/randy3k/radian
+# Radian https://github.com/randy3k/radian
 alias r='radian'
 alias R='radian'
 
