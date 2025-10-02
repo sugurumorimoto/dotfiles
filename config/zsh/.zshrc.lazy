@@ -91,30 +91,30 @@ esac
   abbrev-alias ....="cd ../../.."
   abbrev-alias .....="cd ../../../.."
 
-  abbrev-alias zsh-startuptime='for i in $(seq 1 10); do time zsh -i -c exit > /dev/null ; done' # zsh起動速度計算
+  abbrev-alias zsh-startuptime='for i in $(seq 1 10); do time zsh -i -c exit > /dev/null ; done' # Measure zsh startup time
   abbrev-alias brew-push='brew-file push'
-  #abbrev-alias ls='eza -a' # G: macOSで色を付ける
+  #abbrev-alias ls='eza -a' # G: enable colors on macOS
   #abbrev-alias ll='eza -alhg --group-directories-first --git --time-style long-iso'
   #abbrev-alias l1="ls -1G"
   alias ls='eza --group-directories-first'
   alias la='eza --group-directories-first -a'
   alias ll='eza --group-directories-first -al --header --color-scale --git --icons --time-style=long-iso'
   alias tree='eza --group-directories-first -T --icons'
-  abbrev-alias Mycheck="sudo smartctl --all /dev/disk0" # SSD書き込み量など確認
+  abbrev-alias Mycheck="sudo smartctl --all /dev/disk0" # Check SSD health metrics
   abbrev-alias pwg="pwgen -s -B -n -c 8 1"
   abbrev-alias pwgs="pwgen -s -B -n -c -y 8 1"
   abbrev-alias his='history'
   abbrev-alias help='man'
   abbrev-alias which='whence -p'
-  #abbrev-alias tree="tree -N -C -F -N -a -I '.git|.svn'" # N: 文字化け対策, C:色をつける
+  #abbrev-alias tree="tree -N -C -F -N -a -I '.git|.svn'" # N: avoid mojibake, C: enable colors
   abbrev-alias mywget='aria2c -x10 -s10'
   abbrev-alias brews='brew list -1'
   abbrev-alias powerline-daemon="/Users/${users}/.local/bin/powerline-daemon"
   abbrev-alias breup='brew update && brew upgrade'
   # 直下ディレクトリ全てのファイル名検索
-  abbrev-alias figr='fd -a . | rg'
+  abbrev-alias figr='fd -a . | rg' # Search all filenames under the current directory
   # 直下ディレクトリ全てのファイル内の文章検索
-  abbrev-alias stgr='fd . -t f | xargs rg'
+  abbrev-alias stgr='fd . -t f | xargs rg' # Search file contents under the current directory
   # Reload the shell (i.e. invoke as a login shell)
   abbrev-alias reload="exec ${SHELL} -l"
   # Print each PATH entry on a separate line

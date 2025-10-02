@@ -14,13 +14,13 @@ ZINIT[ZCOMPDUMP_PATH]="$XDG_STATE_HOME/zcompdump"
 typeset -U path
 typeset -U fpath
 
-# zinitの主要なデータ配置先をXDG Base Directoryに追従させる
+# Align zinit's primary data locations with the XDG Base Directory specification
 
 path=(
     "/usr/local/bin(N-/)"
     "$HOME/.local/bin"(N-/)
     "$CARGO_HOME/bin"(N-/)
-# PATHとFPATHをXDG配下や各種ツールのbinディレクトリへ寄せる
+# Direct PATH and FPATH toward XDG directories and tool-specific bin folders
     "$GOPATH/bin"(N-/)
     "$DENO_INSTALL/bin"(N-/)
     "$GEM_HOME/bin"(N-/)
@@ -42,7 +42,7 @@ if [[ ! -f ${ZINIT[HOME_DIR]}/bin/zinit.zsh ]]; then
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 
-# zinit本体が未導入の場合は自動でcloneする
+# Automatically clone zinit if it is not yet installed
 
 source "${ZINIT[HOME_DIR]}/bin/zinit.zsh"
 
@@ -63,42 +63,42 @@ zinit light-mode for \
 zinit ice pick"async.zsh" src"pure.zsh"
 zinit light sindresorhus/pure
 
-# Preztoのセットアップ
+# Prezto setup
 # zinit ice wait'!0'; zinit snippet PZT::modules/helper/init.zsh
 # zinit ice wait'!0'; zinit snippet PZT::modules/history/init.zsh ### history ###
 zinit snippet PZT::modules/helper/init.zsh
 zinit snippet PZT::modules/history/init.zsh
 
-# pureテーマと必要な非同期ライブラリを遅延読み込み
+# Defer loading the pure theme and its async support
 export HISTFILE="$XDG_STATE_HOME/zsh_history"
 
-#ref;https://www.m3tech.blog/entry/dotfiles-bonsai
+# Ref: https://www.m3tech.blog/entry/dotfiles-bonsai
 zshaddhistory() {
     local line="${1%%$'\n'}"
-# 最低限のhelper/historyモジュールのみ利用
+# Use only the helper and history modules
     [[ ! "$line" =~ "^(cd|jj?|lazygit|la|ll|ls|rm|rmdir)($| )" ]]
 }
 
-#cd
+# cd shortcuts
 zinit snippet PZT::modules/directory/init.zsh
 setopt AUTO_CD                # ディレクトリ名だけを入力した時にそこに cd する
 
 #abbrev-alias
 zinit light momo-lab/zsh-abbrev-alias
 
-#finder
+# Finder helpers
 zinit snippet OMZ::plugins/macos/macos.plugin.zsh
 
-# anyframeのセットアップ
-# コマンド短縮入力を自動展開するプラグイン
+# anyframe setup
+# Plugin that auto-expands shorthand commands
 zinit light mollifier/anyframe
-# Ctrl+x -> b
-# peco でディレクトリの移動履歴を表示
-# macOS固有の便利関数群
+
+# Show directory history with peco
+# Provide macOS-specific helper functions
 bindkey '^wf' anyframe-widget-cdr
 bindkey '^wd' anyframe-widget-execute-history
 
-# 履歴やディレクトリ移動をpecoウィジェット化
+# Turn history and directory changes into peco widgets
 ### plugins ###
 zinit wait lucid null for \
     atinit'source "$XDG_CONFIG_HOME/zsh/.zshrc.lazy"' \
@@ -120,4 +120,4 @@ for key in $HOME/.ssh/*; do
   fi
 done
 
-# SSH秘密鍵(公開鍵以外)をmacOSのキーチェーンサポート付きで追加
+# Add private SSH keys with macOS keychain support
