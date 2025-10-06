@@ -73,24 +73,24 @@ npm install -g npm
 npm install -g atcoder-cli
 pip3 install --user online-judge-tools
 
-# OpenCommit
-npm install -g opencommit
-brew services start ollama
+# # OpenCommit
+# npm install -g opencommit
+# brew services start ollama
 
-# 使用するモデルを変数で設定
-MODEL_NAME="llama3:8b"
-ollama pull $MODEL_NAME
+# # 使用するモデルを変数で設定
+# MODEL_NAME="llama3:8b"
+# ollama pull $MODEL_NAME
 
-# AIプロバイダーをOllamaに設定
-oco config set OCO_AI_PROVIDER='ollama'
+# # AIプロバイダーをOllamaに設定
+# oco config set OCO_AI_PROVIDER='ollama'
 
-# 使用するモデルを設定
-oco config set OCO_MODEL=$MODEL_NAME
+# # 使用するモデルを設定
+# oco config set OCO_MODEL=$MODEL_NAME
 
-# APIエンドポイントを設定 (通常はこのままでOK)
-oco config set OCO_API_URL='http://127.0.0.1:11434/api/chat'
+# # APIエンドポイントを設定 (通常はこのままでOK)
+# oco config set OCO_API_URL='http://127.0.0.1:11434/api/chat'
 
-# (オプション) 1行のコミットメッセージを生成する設定
-oco config set OCO_ONE_LINE_COMMIT=true
+# # (オプション) 1行のコミットメッセージを生成する設定
+# oco config set OCO_ONE_LINE_COMMIT=true
 
 true
