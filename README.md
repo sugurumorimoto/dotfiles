@@ -34,6 +34,23 @@ cd ~/repos/github.com/sugurumorimoto/dotfiles
 bash scripts/setup.bash
 ```
 
+### Backup of Existing Files
+
+The installation script automatically backs up existing configuration files before creating symlinks. If you already have files like `.zshrc`, `.zshenv`, or other configuration files in your home directory, they will be renamed with a timestamp:
+
+```text
+~/.zshrc → ~/.zshrc.backup.YYYYMMDD_HHMMSS
+```
+
+Files that are backed up include:
+
+- Shell configs: `.zshrc`, `.zshenv`, `.zprofile`, `.zshrc.lazy`
+- R configs: `.radian_profile`, `.Rprofile`
+- Git configs: `.gitignore`
+- Editor configs: `.editorconfig`, `.vim`, `.czrc`
+
+**Note**: Existing symlinks are overwritten without backup, as they are assumed to be from a previous installation.
+
 ## Repository Structure
 
 ```text
