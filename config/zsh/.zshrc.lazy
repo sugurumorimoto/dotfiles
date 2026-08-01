@@ -426,8 +426,9 @@ tell application "System Events"
     set appList to name of (processes where background only is false)
 end tell
 
-repeat with appName in appList
-    if appName is not "Finder" and appName is not "iTerm" then
+repeat with appItem in appList
+    set appName to appItem as string
+    if appName is not "Finder" and appName is not "iTerm2" and appName is not "iTerm" then
         try
             tell application appName to quit
         end try
