@@ -380,6 +380,27 @@ eject() {
     echo "All specified disks have been processed."
 }
 
+### generate password ###
+# generate_password function definition
+# Generate a random password
+
+generate_password() {
+  local length include_symbols chars
+
+  read -r "length?文字数（デフォルト: 24）: "
+  length="${length:-24}"
+
+  read -r "include_symbols?記号を含めますか？ (y/N): "
+  if [[ "$include_symbols" =~ ^[Yy]$ ]]; then
+    chars='A-Za-z0-9!@#$%^&*_-+='
+  else
+    chars='A-Za-z0-9'
+  fi
+
+  LC_ALL=C tr -dc "$chars" < /dev/urandom | head -c "$length"
+  echo
+}
+
 ### extract ###
 # extract function definition
 # Extract files
@@ -406,7 +427,7 @@ tell application "System Events"
 end tell
 
 repeat with appName in appList
-    if appName is not "Finder" then
+    if appName is not "Finder" and appName is not "iTerm" then
         try
             tell application appName to quit
         end try
@@ -414,22 +435,6 @@ repeat with appName in appList
 end repeat
 EOF
 }
-
-
-### eza ###
-# Set various aliases when loading exa
-#__exa_atload() {
-#    alias ls='eza --group-directories-first'
-#    alias la='eza --group-directories-first -a'
-#    alias ll='eza --group-directories-first -al --header --color-scale --git --icons --time-style=long-iso'
-#    alias tree='eza --group-directories-first -T --icons'
-#}
-
-#zinit wait lucid light-mode as'program' from'gh-r' for \
-#    pick'bin/exa' \
-#    atclone'cp -f completions/exa.zsh _exa' atpull'%atclone' \
-#    atload'__exa_atload' \
-#    @'ogham/exa'
 
 ### yq ###
 zinit wait lucid light-mode as'program' from'gh-r' for \
